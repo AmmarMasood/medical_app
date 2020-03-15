@@ -1,25 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Login from "./components/auth/Login";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Navbar from "./components/layout/navbar";
+import Register from "./components/auth/Register";
+import phyLogin from "./components/auth/phyLogin";
+import patientProfile from "./components/profiles/patients";
+import patientData from "./components/profiles/patientsData";
+import physicianProfile from "./components/profiles/physicians";
+import patientTreatment from "./components/profiles/patientTreatment";
+import AdminLogin from "./components/auth/AdminLogin";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar />
+        {/* Admin Routes */}
+        <Route exact path="/admin/login" component={AdminLogin} />
+        {/* Patient Routes */}
+        <Route exact path="/patient/login" component={Login} />
+        <Route exact path="/patient/register" component={Register} />
+        <Route exact path="/patient/profile" component={patientProfile} />
+        {/* Physician Routes */}
+        <Route exact path="/physician/login" component={phyLogin} />
+        <Route exact path="/physician/profile" component={physicianProfile} />
+        <Route
+          exact
+          path="/physician/patient/treatment"
+          component={patientTreatment}
+        />
+        {/* Both Can see depending on whos login */}
+        <Route exact path="/profile/patient/data" component={patientData} />
+      </div>
+    </Router>
   );
 }
 
