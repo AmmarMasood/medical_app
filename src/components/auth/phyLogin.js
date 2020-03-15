@@ -50,7 +50,9 @@ const Login = () => {
               <Link className="form-p">Dont know your ID? Click here</Link>
             </p>
             <p className="form-p">
-              <Link className="form-p">Not a physician? Click here</Link>
+              <Link className="form-p" to="/patient/login">
+                Not a physician? Click here
+              </Link>
             </p>
           </form>
         </div>

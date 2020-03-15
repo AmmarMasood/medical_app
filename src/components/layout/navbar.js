@@ -9,10 +9,10 @@ const nav = () => {
         HCIS
       </Link>
       <div className="topnav-right">
-        <Link className="link" to="/signup">
+        <Link className="link" to="/patient/register">
           Register
         </Link>
-        <Link className="link" to="/sign">
+        <Link className="link" to="/patient/login">
           Login
         </Link>
       </div>

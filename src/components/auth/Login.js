@@ -52,9 +52,13 @@ const Login = () => {
               Login
             </button>
             <label className="form-p">No Account yet? {"  "}</label>
-            <button className="register-button">Register Now</button>
+            <Link to="/patient/register">
+              <button className="register-button">Register Now</button>
+            </Link>
             <p className="form-p">
-              <Link className="form-p">Are you a physician? Click here</Link>
+              <Link className="form-p" to="/physician/login">
+                Are you a physician? Click here
+              </Link>
             </p>
           </form>
         </div>

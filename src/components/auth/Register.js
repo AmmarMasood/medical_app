@@ -56,7 +56,9 @@ const Register = () => {
               Register
             </button>
             <p className="form-p">
-              <Link className="form-p">Not a patient? Click here</Link>
+              <Link className="form-p" to="/physician/login">
+                Not a patient? Click here
+              </Link>
             </p>
           </form>
         </div>
