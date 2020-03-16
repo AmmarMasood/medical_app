@@ -7,9 +7,10 @@ import Register from "./components/auth/Register";
 import phyLogin from "./components/auth/phyLogin";
 import patientProfile from "./components/profiles/patients";
 import patientData from "./components/profiles/patientsData";
-import physicianProfile from "./components/profiles/physicians";
+import PhysicianProfile from "./components/profiles/physicians";
 import patientTreatment from "./components/profiles/patientTreatment";
 import AdminLogin from "./components/auth/AdminLogin";
+import PhyRegisterByAdmin from "./components/auth/phyRegisterbyAdmin";
 
 function App() {
   return (
@@ -18,13 +19,14 @@ function App() {
         <Navbar />
         {/* Admin Routes */}
         <Route exact path="/admin/login" component={AdminLogin} />
+        <Route exact path="/admin/register/physician" component={PhyRegisterByAdmin} />
         {/* Patient Routes */}
         <Route exact path="/patient/login" component={Login} />
         <Route exact path="/patient/register" component={Register} />
         <Route exact path="/patient/profile" component={patientProfile} />
         {/* Physician Routes */}
         <Route exact path="/physician/login" component={phyLogin} />
-        <Route exact path="/physician/profile" component={physicianProfile} />
+        <Route exact path="/physician/profile" component={PhysicianProfile} />
         <Route
           exact
           path="/physician/patient/treatment"

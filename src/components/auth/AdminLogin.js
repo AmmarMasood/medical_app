@@ -3,15 +3,17 @@ import "../../style/login.css";
 import { Link } from "react-router-dom";
 import { adminLogin } from "../../actions";
 import { useDispatch } from "react-redux";
+import { withRouter } from "react-router-dom";
 
-const AdminLogin = () => {
+
+const AdminLogin = (props) => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const onSubmit = e => {
     const data = { username, password };
     e.preventDefault();
-    dispatch(adminLogin(data));
+    dispatch(adminLogin(data, props.history));
   };
   return (
     <div>
@@ -51,4 +53,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default withRouter(AdminLogin);

@@ -6,7 +6,7 @@ import { patientRegister } from "../../actions/index";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
@@ -14,7 +14,7 @@ const Register = () => {
     e.preventDefault();
     if (password === password2) {
       const data = {
-        email,
+        username,
         password
       };
       dispatch(patientRegister(data));
@@ -31,9 +31,9 @@ const Register = () => {
             <h1 className="form-heading">Create Your Account</h1>
             <input
               required
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              type="email"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              type="text"
               class="user"
               placeholder="Username"
             />

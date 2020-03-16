@@ -1,8 +1,14 @@
 import React from "react";
 import "../../style/navbar.css";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { useDispatch  } from "react-redux";
+import {  logoutUser } from "../../actions/index"
 
-const nav = () => {
+const Nav = (props) => {
+const dispatch = useDispatch();
+  const onLogoutClick = () => {
+    dispatch(logoutUser(props.history));
+  }
   return (
     <div className="topnav">
       <Link className="active" to="/">
@@ -10,14 +16,17 @@ const nav = () => {
       </Link>
       <div className="topnav-right">
         <Link className="link" to="/patient/register">
-          Register
+        {!localStorage.jwtToken ? "Register": ""}
         </Link>
         <Link className="link" to="/patient/login">
-          Login
+          {!localStorage.jwtToken ? "Login": ""}
+        </Link>
+        <Link className="link" onClick={onLogoutClick}>
+          {localStorage.jwtToken ? "Logout": ""}
         </Link>
       </div>
     </div>
   );
 };
 
-export default nav;
+export default withRouter(Nav);

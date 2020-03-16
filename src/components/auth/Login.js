@@ -3,20 +3,19 @@ import "../../style/login.css";
 import { useDispatch } from "react-redux";
 import { patientLogin } from "../../actions/index";
 
-import { Link } from "react-router-dom";
-const Login = () => {
+import { Link, withRouter } from "react-router-dom";
+const Login = (props) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const onSubmit = e => {
     e.preventDefault();
     const data = {
-      email,
-      password,
-      rememberMe
+      username,
+      password
     };
-    dispatch(patientLogin(data));
+    dispatch(patientLogin(data, props.history));
     // console.log(data);
   };
   return (
@@ -28,11 +27,11 @@ const Login = () => {
             <h1 className="form-heading">Login</h1>
             <input
               required
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              type="email"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              type="text"
               className="user"
-              placeholder="E-Mail"
+              placeholder="Username"
             />
             <input
               required
@@ -67,4 +66,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withRouter(Login);

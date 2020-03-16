@@ -1,26 +1,28 @@
 import React, { useState } from "react";
 import "../../style/login.css";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { physicianLogin } from "../../actions/index";
+import { physicianRegister } from "../../actions/index";
+import { withRouter } from "react-router-dom";
 
-const Login = (props) => {
+const PhyRegisterByAdmin = () => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+
   const onSubmit = e => {
     e.preventDefault();
     const data = { username, password };
-    dispatch(physicianLogin(data, props.history));
+    dispatch(physicianRegister(data));
   };
+  
   return (
     <div>
-      <h1>The New Way Of Managing Your Health!</h1>
+      <h1>Welcome to Admin!</h1>
       <div className="cont">
         <div className="form">
           <form action="">
-            <h1 className="form-heading">Login</h1>
+            <h1 className="form-heading">Register Physician</h1>
             <input
               value={username}
               onChange={e => setUsername(e.target.value)}
@@ -37,23 +39,9 @@ const Login = (props) => {
               placeholder="Password"
               required
             />
-            <input
-              type="checkbox"
-              value={rememberMe}
-              onChange={e => setRememberMe(e.target.value)}
-            />
-            <label className="form-p"> Remember Me</label>
             <button className="register" onClick={onSubmit}>
-              Login
+              Register
             </button>
-            <p className="form-p">
-              <Link className="form-p">Dont know your ID? Click here</Link>
-            </p>
-            <p className="form-p">
-              <Link className="form-p" to="/patient/login">
-                Not a physician? Click here
-              </Link>
-            </p>
           </form>
         </div>
       </div>
@@ -61,4 +49,4 @@ const Login = (props) => {
   );
 };
 
-export default withRouter(Login);
+export default withRouter(PhyRegisterByAdmin);

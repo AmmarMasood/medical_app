@@ -8,21 +8,37 @@ import { Provider } from "react-redux";
 import reduxThunk from "redux-thunk";
 import { createStore, applyMiddleware, compose } from "redux";
 import reducers from "./reducers/index";
+import setAuthToken from "./utils/setAuthToken";
+import {
+  getCurrentPatient,
+} from "./actions/index";
+// let store;
+//
+// if (process.env.NODE_ENV === "production") {
+//   store = createStore(reducers, {}, compose(applyMiddleware(reduxThunk)));
+// } else {
+//   store = createStore(
+//     reducers,
+//     {},
+//     compose(
+//       applyMiddleware(reduxThunk),
+//       window.__REDUX_DEVTOOLS_EXTENSION__ &&
+//         window.__REDUX_DEVTOOLS_EXTENSION__()
+//     )
+//   );
+// }
+const store = createStore(
+  reducers,
+  {},
+  compose(
+    applyMiddleware(reduxThunk)
+  )
+);
 
-let store;
-
-if (process.env.NODE_ENV === "production") {
-  store = createStore(reducers, {}, compose(applyMiddleware(reduxThunk)));
-} else {
-  store = createStore(
-    reducers,
-    {},
-    compose(
-      applyMiddleware(reduxThunk),
-      window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
-  );
+if(localStorage.jwtToken){
+  console.log(localStorage.jwtToken);
+  setAuthToken(localStorage.jwtToken);
+  store.dispatch(getCurrentPatient());
 }
 
 ReactDOM.render(
