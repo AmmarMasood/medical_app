@@ -6,11 +6,12 @@ import Navbar from "./components/layout/navbar";
 import Register from "./components/auth/Register";
 import phyLogin from "./components/auth/phyLogin";
 import patientProfile from "./components/profiles/patients";
-import patientData from "./components/profiles/patientsData";
+import PatientData from "./components/profiles/patientsData";
 import PhysicianProfile from "./components/profiles/physicians";
-import patientTreatment from "./components/profiles/patientTreatment";
+import PatientTreatment from "./components/profiles/patientTreatment";
 import AdminLogin from "./components/auth/AdminLogin";
 import PhyRegisterByAdmin from "./components/auth/phyRegisterbyAdmin";
+import AppointPhy from "./components/patientsComponents/appointPhy";
 
 function App() {
   return (
@@ -24,16 +25,17 @@ function App() {
         <Route exact path="/patient/login" component={Login} />
         <Route exact path="/patient/register" component={Register} />
         <Route exact path="/patient/profile" component={patientProfile} />
+        <Route exact path="/patient/appoint/physician" component={AppointPhy} />
         {/* Physician Routes */}
         <Route exact path="/physician/login" component={phyLogin} />
         <Route exact path="/physician/profile" component={PhysicianProfile} />
         <Route
           exact
           path="/physician/patient/treatment"
-          component={patientTreatment}
+          component={PatientTreatment}
         />
         {/* Both Can see depending on whos login */}
-        <Route exact path="/profile/patient/data" component={patientData} />
+        <Route exact path="/profile/patient/data" component={PatientData} />
       </div>
     </Router>
   );

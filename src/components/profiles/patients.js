@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "../../style/patient-profile.css";
 import { Form, Col, Button, Row, Card } from "react-bootstrap";
 import { useDispatch,useSelector  } from "react-redux";
-import {  proxy, patientProfileUpdate,updatePatientInsurance, getCurrentPatient, getCurrentPatientInsurance } from "../../actions/index";
-import {withRouter} from "react-router-dom";
+import {  proxy, getMedicalRecord,patientProfileUpdate,updatePatientInsurance, getCurrentPatient, getCurrentPatientInsurance } from "../../actions/index";
+import {withRouter, Link} from "react-router-dom";
 import axios from 'axios';
 
 const PatientProfile = (props) => {
@@ -18,6 +18,7 @@ const PatientProfile = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [insuranceName, setInsuranceName] = useState("");
   const [insuranceId, setInsuranceId] = useState("");
+  const [medicalRecords, setMedicalRecords] = useState([]);
 
   useEffect(() => {
     if(!localStorage.jwtToken){
@@ -45,6 +46,9 @@ const PatientProfile = (props) => {
       setInsuranceId(data.insuranceid  ? data.insuranceid : "");
     })
     .catch(err => console.log(err))
+    axios.get(`${proxy}/getmedicalrecords`)
+    .then(res => setMedicalRecords(res.data.medicalListDtoList))
+    .catch(err => console.log(err));
     console.log(auth);
   }
   }, [])
@@ -71,28 +75,35 @@ const PatientProfile = (props) => {
     console.log(data);
     dispatch(updatePatientInsurance(data));
   };
+
+const onRecordSelect = (recordId) => {
+  console.log(recordId);
+  dispatch(getMedicalRecord(recordId, "PATIENT",props.history));
+  // to="/profile/patient/data"
+}
+
   const cards = () => {
-    const data = [
-      {
-        data: "Example data 1",
-        Physician: "Physician Name",
-        Date: "01.01.1999"
-      },
-      {
-        data: "Example data 2",
-        Physician: "Physician Name",
-        Date: "01.01.1999"
-      }
-    ];
-    return data.map(d => (
+    // const data = [
+    //   {
+    //     data: "Example data 1",
+    //     Physician: "Physician Name",
+    //     Date: "01.01.1999"
+    //   },
+    //   {
+    //     data: "Example data 2",
+    //     Physician: "Physician Name",
+    //     Date: "01.01.1999"
+    //   }
+    // ];
+    return medicalRecords.map(d => (
       <Card style={{ width: "30rem" }}>
         <Card.Body>
-          <Card.Title>{d.data}</Card.Title>
+          <Card.Title>{"Record Data "+ d.id}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">
-            {d.Physician}
+            {"Physician Name: " + d.physicianName}
           </Card.Subtitle>
-          <Card.Text>{d.Date}</Card.Text>
-          <Card.Link href="#">Details</Card.Link>
+          <Card.Text>{d.date}</Card.Text>
+          <Card.Link onClick={() => onRecordSelect(d.id)} href="#">Details</Card.Link>
         </Card.Body>
       </Card>
     ));
@@ -228,7 +239,14 @@ const PatientProfile = (props) => {
       </div>
 
       <div className="patient-records">
-        <h4 className="patient-form-heading">Medical Records</h4>
+        <h4 className="patient-form-heading">Medical Records</h4> <Button
+          style={{ marginBottom: "8px" }}
+          variant="primary"
+          type="submit"
+          onClick={() => props.history.push("/patient/appoint/physician")}
+        >
+          Create Record
+        </Button>
         {cards()}
       </div>
     </div>

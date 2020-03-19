@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../style/patient-profile.css";
 import { Form, Col, Button, Row, Card } from "react-bootstrap";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { useDispatch,useSelector  } from "react-redux";
 
-const patientTreatment = () => {
-  const cards = () => {
-    const data = [
+const PatientTreatment = () => {
+
+
+  // component will receive
+
+const cards = () =>{
+  const data = [
       {
-        data: "Example data 1",
+        data: "Example doto 1",
         Physician: "Physician Name",
         Date: "01.01.1999"
       },
@@ -20,6 +25,7 @@ const patientTreatment = () => {
     ];
     return data.map(d => (
       <Card style={{ width: "30rem" }}>
+          {console.log("here")}
         <Card.Body>
           <Card.Title>{d.data}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">
@@ -39,7 +45,7 @@ const patientTreatment = () => {
           <h4 className="patient-form-heading">Personal Information</h4>
           <Form.Group as={Row} controlId="formHorizontalName">
             <Col sm={6}>
-              <Form.Control type="text" placeholder="Enter Name" />
+              <Form.Control type="text" placeholder="Enter Name"/>
             </Col>
             <Col sm={6}>
               <Form.Control type="text" placeholder="Enter Surname" />
@@ -110,4 +116,4 @@ const patientTreatment = () => {
   );
 };
 
-export default patientTreatment;
+export default PatientTreatment;

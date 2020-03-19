@@ -1,24 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../style/patient-profile.css";
 import { Form, Col, Button, Row, Card } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { physicianProfileUpdate } from "../../actions/index";
+import { useDispatch, useSelector } from "react-redux";
+import { proxy, physicianProfileUpdate, getCurrentPhysician, getPatientWithId } from "../../actions/index";
+import axios from 'axios';
+import {withRouter} from "react-router-dom";
+const PhysicianProfile = (props) => {
 
-const PhysicianProfile = () => {
   const dispatch = useDispatch();
+  const auth = useSelector(state => state.auth);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  
+  const [patients, setPatients] = useState([]);
+
+  useEffect(() => {
+    if(!localStorage.jwtToken){
+      console.log("ERROR");
+      props.history.push("/physician/login");
+    }else{
+    dispatch(getCurrentPhysician());
+    axios.get(`${proxy}/getphysiciandetail`)
+    .then(res =>{
+      const data = res.data;
+      setName(data.name ? data.name : "");
+      setSurname(data.surname  ? data.surname : "");
+      setAddress(data.address  ? data.address : "");
+      setEmail(data.email  ? data.email : "");
+      setPhoneNumber(data.phoneNumber  ? data.phoneNumber : "");
+    })
+    .catch(err => console.log(err));
+    console.log(auth);
+    axios.get(`${proxy}/getPatients`)
+    .then(res => setPatients(res.data))
+    .catch(err => console.log(err))
+  }
+  }, [])
+
+
   const onSubmit = (e) => {
     e.preventDefault();
     const data = {
       name,surname,email,address,phoneNumber
     }
     dispatch(physicianProfileUpdate(data));
+  };
+
+  const onPatientSelect = (id) => {
+    console.log(id);
+    dispatch(getPatientWithId(id, props.history));
   }
+
   const cards = () => {
 
     const data = [
@@ -33,15 +67,14 @@ const PhysicianProfile = () => {
         Date: "Last visit: 01.01.1999"
       }
     ];
-    return data.map(d => (
+    return patients.map(d => (
       <Card style={{ width: "30rem" }}>
         <Card.Body>
-          <Card.Title>{d.data}</Card.Title>
+          <Card.Title>{d.name}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">
-            {d.Physician}
+            {d.phoneNumber}
           </Card.Subtitle>
-          <Card.Text>{d.Date}</Card.Text>
-          <Card.Link href="#">Details</Card.Link>
+            <Card.Link onClick={() => onPatientSelect(d.id)} href="#">Details</Card.Link>
         </Card.Body>
       </Card>
     ));
@@ -83,4 +116,4 @@ const PhysicianProfile = () => {
   );
 };
 
-export default PhysicianProfile;
+export default withRouter(PhysicianProfile);
