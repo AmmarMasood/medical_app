@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../style/patient-profile.css";
 import { Form, Col, Button, Row, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { proxy, physicianProfileUpdate, getCurrentPhysician, getPatientWithId } from "../../actions/index";
+import { proxy, physicianProfileUpdate, getCurrentPhysician, getPatientWithId, selectedRecordId } from "../../actions/index";
 import axios from 'axios';
 import {withRouter} from "react-router-dom";
 const PhysicianProfile = (props) => {
@@ -14,7 +14,7 @@ const PhysicianProfile = (props) => {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [patients, setPatients] = useState([]);
+  const [records, setRecords] = useState([]);
 
   useEffect(() => {
     if(!localStorage.jwtToken){
@@ -34,7 +34,7 @@ const PhysicianProfile = (props) => {
     .catch(err => console.log(err));
     console.log(auth);
     axios.get(`${proxy}/getPatients`)
-    .then(res => setPatients(res.data))
+    .then(res => setRecords(res.data.list))
     .catch(err => console.log(err))
   }
   }, [])
@@ -48,33 +48,34 @@ const PhysicianProfile = (props) => {
     dispatch(physicianProfileUpdate(data));
   };
 
-  const onPatientSelect = (id) => {
-    console.log(id);
-    dispatch(getPatientWithId(id, props.history));
+  const onPatientSelect = (patientId, recordId) => {
+    // console.log(id);
+    dispatch(selectedRecordId(recordId))
+    dispatch(getPatientWithId(patientId,recordId, props.history));
   }
 
   const cards = () => {
+    // const data = [
+    //   {
+    //     data: "Patient A",
+    //     Physician: "Last Treatment",
+    //     Date: "Last visit: 01.01.1999"
+    //   },
+    //   {
+    //     data: "Patient B",
+    //     Physician: "Last Treatment",
+    //     Date: "Last visit: 01.01.1999"
+    //   }
+    // ];
 
-    const data = [
-      {
-        data: "Patient A",
-        Physician: "Last Treatment",
-        Date: "Last visit: 01.01.1999"
-      },
-      {
-        data: "Patient B",
-        Physician: "Last Treatment",
-        Date: "Last visit: 01.01.1999"
-      }
-    ];
-    return patients.map(d => (
+    return records.map(d => (
       <Card style={{ width: "30rem" }}>
         <Card.Body>
-          <Card.Title>{d.name}</Card.Title>
+          <Card.Title>Record {d.recordId}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">
-            {d.phoneNumber}
+            Patient Name: {d.patientName ? d.patientName : "Not availble"}
           </Card.Subtitle>
-            <Card.Link onClick={() => onPatientSelect(d.id)} href="#">Details</Card.Link>
+            <Card.Link onClick={() => onPatientSelect(d.patientId, d.recordId)} href="#">Details</Card.Link>
         </Card.Body>
       </Card>
     ));
@@ -109,7 +110,7 @@ const PhysicianProfile = (props) => {
       </div>
 
       <div className="patient-records">
-        <h4 className="patient-form-heading">Patients Overview</h4>
+        <h4 className="patient-form-heading">Records Overview</h4>
         {cards()}
       </div>
     </div>

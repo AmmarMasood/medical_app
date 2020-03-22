@@ -1,8 +1,9 @@
-import { GET_PATIENT_INFORMATION_WITH_ID } from "../actions/types";
+import { GET_PATIENT_INFORMATION_WITH_ID, SELECTED_RECORD_ID } from "../actions/types";
 import isEmpty from "../utils/isEmpty";
 
 const initialState = {
-  patientInformation: []
+  patientInformation: [],
+  recordId: null
 };
 
 export default function(state = initialState, action) {
@@ -10,8 +11,14 @@ export default function(state = initialState, action) {
     case GET_PATIENT_INFORMATION_WITH_ID:
     console.log(action.payload)
       return {
+        ...state,
         patientInformation: action.payload,
-      }
+      };
+    case SELECTED_RECORD_ID:
+    return{
+      ...state,
+      recordId: action.payload
+    }
     default:
       return state;
   }

@@ -16,7 +16,11 @@ useEffect(() => {
     if(props.location.state.state){
       dispatch(getMedicalRecord(props.location.state.state, props.location.state.role,props.history));
     }else{
+      if(props.location.state.role === "PATIENT"){
       props.history.push("/patient/profile");
+    }else if(props.location.state.role === "PHYSICIAN"){
+      props.history.push("/physician/patient/treatment");
+    }
     }
   }
 }, [])
@@ -70,15 +74,57 @@ useEffect(() => {
     </div>
     )
   };
+  const returnButtonDependingOnRole = () => {
+    if(record.role === "PATIENT"){
+      return(
+        <Link to="/patient/profile">
+      <Button variant="primary" type="submit" style={{margin: "5px 5px 5px 20px", padding: "5px 25px 5px 25px"}}>
+      &#8592;{" "}  Go Back
+      </Button>
+      </Link>
+      )
+    }else if(record.role === "PHYSICIAN"){
+      return(
+        <Link to="/physician/patient/treatment">
+      <Button variant="primary" type="submit" style={{margin: "5px 5px 5px 20px", padding: "5px 25px 5px 25px"}}>
+      &#8592;{" "}  Go Back
+      </Button>
+      </Link>
+      )
+    }
+
+  };
+
+  const returnContactButtonDependingOnRole = () => {
+    if(record.role === "PATIENT"){
+      return(
+        <>
+        <Button variant="primary" type="submit">
+          Contact
+        </Button>
+        <br />
+        <Button variant="primary" type="submit">
+          Make Appointment
+        </Button>
+        <br />
+        <Button variant="primary" type="submit">
+          Dismiss Appointment
+        </Button>
+        </>
+      )
+    }else if(record.role === "PHYSICIAN"){
+      return(
+        <Button variant="primary" type="submit">
+          Contact
+        </Button>
+      )
+    }
+  }
 
   return (
     <>
     <div style={{textAlign: "left"}}>
-      <Link to="/patient/profile">
-    <Button variant="primary" type="submit" style={{margin: "5px 5px 5px 20px", padding: "5px 25px 5px 25px"}}>
-    &#8592;{" "}  Go Back
-    </Button>
-    </Link>
+      {returnButtonDependingOnRole()}
     </div>
     <div className="main-patient">
   {console.log(record)}
@@ -107,17 +153,7 @@ useEffect(() => {
             <Form.Control type="text" placeholder="Enter Phone Number" readOnly defaultValue={record.recordData.physician ?record.recordData.physician.phoneNumber : ""}/>
           </Form.Group>
           <div className="patient-data-form-btns">
-            <Button variant="primary" type="submit">
-              Contact
-            </Button>
-            <br />
-            <Button variant="primary" type="submit">
-              Make Appointment
-            </Button>
-            <br />
-            <Button variant="primary" type="submit">
-              Dismiss Appointment
-            </Button>
+            {returnContactButtonDependingOnRole()}
           </div>
         </Form>
       </div>

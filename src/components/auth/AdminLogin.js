@@ -2,18 +2,27 @@ import React, { useState } from "react";
 import "../../style/login.css";
 import { Link } from "react-router-dom";
 import { adminLogin } from "../../actions";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { withRouter } from "react-router-dom";
+
 
 
 const AdminLogin = (props) => {
   const dispatch = useDispatch();
+  const errors = useSelector(state => state.errors);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setErrors] = useState({});
+
+
   const onSubmit = e => {
     const data = { username, password };
     e.preventDefault();
-    dispatch(adminLogin(data, props.history));
+    if(username && password){
+      dispatch(adminLogin(data, props.history));
+    }else{
+      setErrors({username: "Please fill the values" });
+    }
   };
   return (
     <div>
@@ -43,8 +52,10 @@ const AdminLogin = (props) => {
             <button class="register" onClick={onSubmit}>
               Login
             </button>
+            <p style={{color: "red", fontSize: "25px"}}>{error.username}</p>
+            <p style={{color: "red", fontSize: "25px"}}>{errors.data ? errors.data.message : ""}</p>
             <p className="form-p" style={{ marginTop: "30px" }}>
-              <Link className="form-p">Not an Admin? Click here</Link>
+              <Link to="/" className="form-p">Not an Admin? Click here</Link>
             </p>
           </form>
         </div>
