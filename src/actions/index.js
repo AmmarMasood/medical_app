@@ -16,7 +16,7 @@ export const patientLogin = (userData, history) => dispatch => {
   axios
     .post(`${proxy}/authenticate`, userData)
     .then(res => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.role === "PATIENT") {
         const token = `Bearer ${res.data.jwt}`;
         const role = res.data.role;
@@ -90,7 +90,6 @@ export const logoutUser = history => dispatch => {
 };
 
 export const patientRegister = (userData, history) => dispatch => {
-  // yahi hai na?
   axios
     .post(`${proxy}/register/patientregister`, userData)
     .then(res => history.push("/patient/login"))
@@ -170,7 +169,6 @@ export const adminLogin = (userData, history) => dispatch => {
       if (res.data.role === "ADMIN") {
         const token = `Bearer ${res.data.jwt}`;
         const role = res.data.role;
-        console.log(res.data);
         localStorage.setItem("jwtToken", token);
         localStorage.setItem("userRole", role);
         setAuthToken(token);
@@ -247,7 +245,7 @@ export const getPatientWithId = (patientId, recordId, history) => dispatch => {
         rId: recordId
       })
     )
-    .catch(err => alert(err.respomse.data.message));
+    .catch(err => alert(err.response.data.message));
 };
 
 export const selectedRecordId = recordId => dispatch => {

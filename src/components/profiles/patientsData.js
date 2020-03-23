@@ -171,8 +171,8 @@ const PatientData = props => {
     <>
       <div style={{ textAlign: "left" }}>{returnButtonDependingOnRole()}</div>
       <div className="main-patient">
-        {console.log(record)}
-        {console.log(props.location.state)}
+        {/* {console.log(record)} */}
+        {/* {console.log(props.location.state)} */}
 
         <div className="patient-records">
           <h4 className="patient-form-heading">Medical Records</h4>

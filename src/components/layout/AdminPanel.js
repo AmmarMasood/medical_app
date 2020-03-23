@@ -36,7 +36,7 @@ function AdminPanel(props) {
             </Button>
           </Link>
         </div>
-        {console.log("run")}
+        {/* {console.log("run")} */}
         <div>
           <Link to="/admin/delete/physician">
             <Button

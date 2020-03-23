@@ -31,7 +31,7 @@ const PatientTreatment = props => {
     }
     if (!patientWithId.patientInformation[0]) {
       if (props.location.state) {
-        console.log(props.location.state.state);
+        // console.log(props.location.state.state);
         dispatch(
           getPatientWithId(
             props.location.state.pId,
@@ -49,7 +49,7 @@ const PatientTreatment = props => {
   }, []);
 
   const onAddTreatmentClick = () => {
-    console.log(patientWithId.recordId);
+    // console.log(patientWithId.recordId);
     dispatch(getMedicalRecordWithId(patientWithId.recordId, props.history));
   };
 
@@ -65,7 +65,7 @@ const PatientTreatment = props => {
   };
 
   const onRecordSelect = recordId => {
-    console.log(recordId);
+    // console.log(recordId);
     dispatch(getMedicalRecord(recordId, "PHYSICIAN", props.history));
     // to="/profile/patient/data"
   };
@@ -87,9 +87,9 @@ const PatientTreatment = props => {
     if (patientWithId.patientInformation[0]) {
       return patientWithId.patientInformation.map(d => (
         <Card style={{ width: "30rem" }}>
-          {console.log(patientWithId.patientInformation)}
+          {/* {console.log(patientWithId.patientInformation)} */}
           <Card.Body>
-            {console.log(d.treatment ? d.treatment : "")}
+            {/* {console.log(d.treatment ? d.treatment : "")} */}
             <Card.Title>Record Data {d.id}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">
               {d.physician.name + " " + d.physician.surname}

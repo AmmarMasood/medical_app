@@ -106,7 +106,7 @@ const PatientProfile = props => {
       email,
       phoneNumber
     };
-    console.log(data);
+    // console.log(data);
     dispatch(patientProfileUpdate(data));
   };
   const onInsuranceSubmit = e => {
@@ -115,12 +115,12 @@ const PatientProfile = props => {
       name: insuranceName,
       insuranceid: insuranceId
     };
-    console.log(data);
+    // console.log(data);
     dispatch(updatePatientInsurance(data));
   };
 
   const onRecordSelect = recordId => {
-    console.log(recordId);
+    // console.log(recordId);
     dispatch(getMedicalRecord(recordId, "PATIENT", props.history));
     // to="/profile/patient/data"
   };
