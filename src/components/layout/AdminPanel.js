@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button, Card } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+// protects route
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../actions/index";
+import { withRouter } from "react-router-dom";
 
-export default function AdminPanel() {
+function AdminPanel(props) {
+  // protects route
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (
+      !(localStorage.jwtToken && localStorage.getItem("userRole") === "ADMIN")
+    ) {
+      dispatch(logoutUser(props.history));
+    }
+  }, []);
+
   return (
     <div>
       <h1>Welcome to Admin Panel</h1>
@@ -57,3 +71,4 @@ export default function AdminPanel() {
     </div>
   );
 }
+export default withRouter(AdminPanel);

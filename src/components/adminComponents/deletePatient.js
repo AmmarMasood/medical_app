@@ -1,51 +1,66 @@
 import React, { useState, useEffect } from "react";
 import { Form, Col, Button, Row, Card, Alert } from "react-bootstrap";
-import axios from 'axios';
-import {proxy} from "../../actions/index";
-import {withRouter} from "react-router-dom";
+import axios from "axios";
+import { proxy } from "../../actions/index";
+import { withRouter } from "react-router-dom";
+import { logoutUser } from "../../actions/index";
+import { useDispatch } from "react-redux";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-const DeletePatient = (props) => {
-    const [patients, setPatients] = useState([]);
-    const [success, setSuccess] = useState({});
-    const [error, setError] = useState({});
-    const [showErr, setShowErr] = useState(false);
-    const [showSucc, setShowSucc] = useState(false);
+const DeletePatient = props => {
+  const dispatch = useDispatch();
+  const [patients, setPatients] = useState([]);
+  const [success, setSuccess] = useState({});
+  const [error, setError] = useState({});
+  const [showErr, setShowErr] = useState(false);
+  const [showSucc, setShowSucc] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  axios.get(`${proxy}/admin/getallpatients`)
-  .then(res => setPatients(res.data.getAllPatientDtos))
-  .catch(err => console.log(err))
-}, []);
+  useEffect(() => {
+    if (
+      !(localStorage.jwtToken && localStorage.getItem("userRole") === "ADMIN")
+    ) {
+      dispatch(logoutUser(props.history));
+    }
+    axios
+      .get(`${proxy}/admin/getallpatients`)
+      .then(res => {
+        setPatients(res.data.getAllPatientDtos);
+        setLoading(false);
+      })
+      .catch(err => alert(err.response.data.message));
+  }, []);
 
-function AlertDismissibleError() {
-  if (showErr) {
-    return (
-      <Alert variant="danger" onClose={() => setShowErr(false)} dismissible>
-        <Alert.Heading>Error: Can not delete Patient!</Alert.Heading>
-      </Alert>
-    );
+  function AlertDismissibleError() {
+    if (showErr) {
+      return (
+        <Alert variant="danger" onClose={() => setShowErr(false)} dismissible>
+          <Alert.Heading>Error: Can not delete Patient!</Alert.Heading>
+        </Alert>
+      );
+    }
+    return "";
   }
-  return("")
-}
 
-function AlertDismissibleSuccess() {
-  if (showSucc) {
-    return (
-      <Alert variant="success" onClose={() => setShowSucc(false)} dismissible>
-        <Alert.Heading>Patient successfully deleted!</Alert.Heading>
-      </Alert>
-    );
+  function AlertDismissibleSuccess() {
+    if (showSucc) {
+      return (
+        <Alert variant="success" onClose={() => setShowSucc(false)} dismissible>
+          <Alert.Heading>Patient successfully deleted!</Alert.Heading>
+        </Alert>
+      );
+    }
+    return "";
   }
-  return("")
-}
 
-
-  const onPatientSelect = (d) => {
-    axios.post(`${proxy}/admin/deletePatient/?patientId=${d}`)
-    .then(res =>  setPatients(patients.filter(p => p.id !== d)))
-    .then(res => setShowSucc(true))
-    .catch(err => setShowErr(true));
-  }
+  const onPatientSelect = d => {
+    axios
+      .post(`${proxy}/admin/deletePatient/?patientId=${d}`)
+      .then(res => setPatients(patients.filter(p => p.id !== d)))
+      .then(res => setShowSucc(true))
+      .catch(err => setShowErr(true));
+  };
 
   const cards = () => {
     return patients.map(d => (
@@ -67,10 +82,33 @@ function AlertDismissibleSuccess() {
     ));
   };
 
-  return (
+  return loading ? (
+    <div
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)"
+      }}
+    >
+      <Loader type="TailSpin" color="#00BFFF" height={100} width={100} />
+    </div>
+  ) : (
     <div>
-      <div style={{display: "flex", flexDirection: "column" ,justifyContent: "center", alignItems: "center"}}>
-        <h4 className="patient-form-heading" style={{marginBottom: "20px", marginTop:"10px"}}>Delete Patient</h4>{" "}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <h4
+          className="patient-form-heading"
+          style={{ marginBottom: "20px", marginTop: "10px" }}
+        >
+          Delete Patient
+        </h4>{" "}
         <AlertDismissibleError />
         <AlertDismissibleSuccess />
         {cards()}

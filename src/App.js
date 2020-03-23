@@ -17,6 +17,7 @@ import Landing from "./components/layout/Landing";
 import AdminPanel from "./components/layout/AdminPanel";
 import DeletePhysician from "./components/adminComponents/deletePhysician";
 import DeletePatient from "./components/adminComponents/deletePatient";
+
 function App() {
   return (
     <Router>
@@ -26,9 +27,17 @@ function App() {
         {/* Admin Routes */}
         <Route exact path="/admin/login" component={AdminLogin} />
         <Route exact path="/admin/panel" component={AdminPanel} />
-        <Route exact path="/admin/register/physician" component={PhyRegisterByAdmin} />
-        <Route exact path="/admin/delete/physician" component={DeletePhysician}/>
-        <Route exact path="/admin/delete/patient" component={DeletePatient}/>
+        <Route
+          exact
+          path="/admin/register/physician"
+          component={PhyRegisterByAdmin}
+        />
+        <Route
+          exact
+          path="/admin/delete/physician"
+          component={DeletePhysician}
+        />
+        <Route exact path="/admin/delete/patient" component={DeletePatient} />
         {/* Patient Routes */}
         <Route exact path="/patient/login" component={Login} />
         <Route exact path="/patient/register" component={Register} />

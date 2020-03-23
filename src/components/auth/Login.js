@@ -1,21 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../style/login.css";
-import { useDispatch } from "react-redux";
-import { patientLogin } from "../../actions/index";
+import { useDispatch, useSelector } from "react-redux";
+import { patientLogin, logoutUser } from "../../actions/index";
 
 import { Link, withRouter } from "react-router-dom";
-const Login = (props) => {
+
+const Login = props => {
   const dispatch = useDispatch();
+  const errors = useSelector(state => state.errors);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [error, setErrors] = useState({});
+
+  useEffect(() => {
+    if (localStorage.jwtToken && localStorage.getItem("userRole") === "ADMIN") {
+      props.history.push("/admin/panel");
+    } else if (
+      localStorage.jwtToken &&
+      localStorage.getItem("userRole") === "PHYSICIAN"
+    ) {
+      props.history.push("/physician/profile");
+    } else if (
+      localStorage.jwtToken &&
+      localStorage.getItem("userRole") === "PATIENT"
+    ) {
+      props.history.push("/patient/profile");
+    } else if (localStorage.jwtToken) {
+      dispatch(logoutUser(props.history));
+    }
+  }, []);
+
   const onSubmit = e => {
     e.preventDefault();
     const data = {
       username,
       password
     };
-    dispatch(patientLogin(data, props.history));
+    if (username && password) {
+      dispatch(patientLogin(data, props.history));
+    } else {
+      setErrors({ username: "Please fill the values" });
+    }
     // console.log(data);
   };
   return (
@@ -24,7 +49,7 @@ const Login = (props) => {
       <div className="cont">
         <div className="form">
           <form action="">
-            <h1 className="form-heading">Login</h1>
+            <h1 className="form-heading"> Patient Login</h1>
             <input
               required
               value={username}
@@ -41,12 +66,6 @@ const Login = (props) => {
               className="pass"
               placeholder="Password"
             />
-            <input
-              type="checkbox"
-              value={rememberMe}
-              onChange={e => setRememberMe(e.target.value)}
-            />
-            <label className="form-p"> Remember Me</label>
             <button className="login" onClick={onSubmit}>
               Login
             </button>
@@ -54,6 +73,12 @@ const Login = (props) => {
             <Link to="/patient/register">
               <button className="register-button">Register Now</button>
             </Link>
+            <p style={{ color: "red", fontSize: "25px" }}>{error.username}</p>
+            <p style={{ color: "red", fontSize: "25px" }}>
+              {errors.patientLoginError
+                ? errors.patientLoginError.data.message
+                : ""}
+            </p>
             <p className="form-p">
               <Link className="form-p" to="/physician/login">
                 Are you a physician? Click here

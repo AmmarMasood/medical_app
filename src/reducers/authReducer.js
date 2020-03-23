@@ -10,7 +10,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_USER:
-    console.log(action.payload);
+      // console.log(action.payload);
       return {
         ...state,
         isAuthenticated: !isEmpty(action.payload),
@@ -18,10 +18,10 @@ export default function(state = initialState, action) {
       };
 
     case SET_CURRENT_USER_INSURANCE:
-    return{
-      ...state,
-      insurance: action.payload
-    }
+      return {
+        ...state,
+        insurance: action.payload
+      };
     default:
       return state;
   }

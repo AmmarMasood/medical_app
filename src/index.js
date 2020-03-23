@@ -9,9 +9,7 @@ import reduxThunk from "redux-thunk";
 import { createStore, applyMiddleware, compose } from "redux";
 import reducers from "./reducers/index";
 import setAuthToken from "./utils/setAuthToken";
-import {
-  getCurrentPatient,
-} from "./actions/index";
+import { getCurrentPatient } from "./actions/index";
 // let store;
 //
 // if (process.env.NODE_ENV === "production") {
@@ -27,16 +25,10 @@ import {
 //     )
 //   );
 // }
-const store = createStore(
-  reducers,
-  {},
-  compose(
-    applyMiddleware(reduxThunk)
-  )
-);
+const store = createStore(reducers, {}, compose(applyMiddleware(reduxThunk)));
 
-if(localStorage.jwtToken){
-  console.log(localStorage.jwtToken);
+if (localStorage.jwtToken) {
+  // console.log(localStorage.jwtToken);
   setAuthToken(localStorage.jwtToken);
   store.dispatch(getCurrentPatient());
 }
